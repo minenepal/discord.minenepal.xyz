@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MineNepal Discord</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center p-6">
+
+  <div class="w-full max-w-3xl">
+
+    <h1 class="text-4xl font-bold mb-6 text-indigo-400">MineNepal Discord Server</h1>
+
+    <button
+      id="join-btn"
+      class="w-full bg-indigo-600 hover:bg-indigo-700 transition px-6 py-3 rounded-lg text-lg font-medium mb-10 shadow-lg"
+    >
+      Join Discord
+    </button>
+
+    <div id="widget" class="space-y-8">
+
+      <!-- Loading / error -->
+      <div id="status" class="text-gray-400">Loading Discord data...</div>
+
+      <!-- Server Info -->
+      <div id="server-info" class="hidden bg-gray-800 p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-2" id="guild-name"></h2>
+        <p class="text-gray-300" id="guild-id"></p>
+        <p class="mt-2 text-gray-400" id="presence-count"></p>
+      </div>
+
+      <!-- Channels -->
+      <div id="channels-section" class="hidden">
+        <h3 class="text-xl font-semibold mb-2">Voice / Stage Channels</h3>
+        <ul id="channels-list" class="space-y-1 text-gray-300"></ul>
+      </div>
+
+      <!-- Members Online -->
+      <div id="members-section" class="hidden">
+        <h3 class="text-xl font-semibold mb-2">Online Members (Widget)</h3>
+        <ul id="members-list" class="space-y-1 text-gray-300"></ul>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const WIDGET_URL = "https://discord.com/api/guilds/1438003174664568895/widget.json";
+
+    // Join redirects with probability
+    document.getElementById("join-btn").addEventListener("click", () => {
+      const link1 = "https://discord.gg/afEaR72sEf"; // 60%
+      const link2 = "https://discord.gg/2qGJrjzEpr"; // 40%
+      const random = Math.random();
+      window.location.href = (random < 0.6) ? link1 : link2;
+    });
+
+    async function fetchWidget() {
+      try {
+        const res = await fetch(WIDGET_URL);
+        if (!res.ok) throw new Error("Network response was not ok");
+        const data = await res.json();
+
+        document.getElementById("status").remove();
+
+        // Show basic server info
+        document.getElementById("guild-name").textContent = data.name;
+        document.getElementById("guild-id").textContent = "Server ID: " + data.id;
+        document.getElementById("presence-count").textContent = "Online: " + data.presence_count;
+
+        document.getElementById("server-info").classList.remove("hidden");
+
+        // Channels
+        if (data.channels && data.channels.length > 0) {
+          const chList = document.getElementById("channels-list");
+          data.channels.forEach(ch => {
+            const li = document.createElement("li");
+            li.textContent = ch.name + " (ID: " + ch.id + ")";
+            chList.appendChild(li);
+          });
+          document.getElementById("channels-section").classList.remove("hidden");
+        }
+
+        // Members (widget lists only *some* online members, limited)
+        if (data.members && data.members.length > 0) {
+          const memList = document.getElementById("members-list");
+          data.members.forEach(m => {
+            const li = document.createElement("li");
+            // m.id is a linear id (widget anonymizes) :contentReference[oaicite:0]{index=0}
+            li.textContent = (m.username || "Unknown") + (m.status ? " — " + m.status : "");
+            memList.appendChild(li);
+          });
+          document.getElementById("members-section").classList.remove("hidden");
+        }
+
+      } catch (err) {
+        console.error("Failed fetching widget:", err);
+        document.getElementById("status").textContent = "Failed to load Discord data.";
+      }
+    }
+
+    fetchWidget();
+  </script>
+
+</body>
+</html>
