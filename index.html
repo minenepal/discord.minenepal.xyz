@@ -6,24 +6,51 @@
   <title>MineNepal Discord</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Cozy aesthetic fonts and smooth transitions */
+    /* Discord-inspired theme */
     body {
       font-family: 'Poppins', sans-serif;
-      background: #fdf6f0;
+      background: #36393f;
+      color: #dcddde;
     }
+
     .card {
-      background: #ffffff;
+      background: #2f3136;
       border-radius: 1rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
       transition: transform 0.2s, box-shadow 0.2s;
     }
+
     .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.7);
     }
+
     .avatar {
       border-radius: 50%;
-      border: 2px solid #f0e5e0;
+      border: 2px solid #7289da;
+    }
+
+    .btn-discord {
+      background: #5865f2;
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      transition: background 0.2s;
+    }
+
+    .btn-discord:hover {
+      background: #4752c4;
+    }
+
+    h1, h2, h3 {
+      color: #ffffff;
+    }
+
+    li {
+      background: #202225;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
     }
   </style>
 </head>
@@ -32,34 +59,34 @@
   <div class="w-full max-w-4xl">
 
     <!-- Title -->
-    <h1 class="text-4xl font-bold mb-6 text-pink-400 text-center">🌸 MineNepal Discord Server 🌸</h1>
+    <h1 class="text-4xl font-bold mb-6 text-center">💠 MineNepal Discord Server 💠</h1>
 
     <!-- Join Button -->
-    <button id="join-btn" class="w-full bg-pink-300 hover:bg-pink-400 text-white px-6 py-3 rounded-lg font-semibold mb-10 shadow-lg transition">
+    <button id="join-btn" class="w-full btn-discord mb-10 shadow-lg">
       Join Discord
     </button>
 
     <!-- Discord Widget Data -->
     <div id="widget" class="space-y-8">
 
-      <div id="status" class="text-gray-500 text-center">Loading Discord data...</div>
+      <div id="status" class="text-gray-400 text-center">Loading Discord data...</div>
 
       <!-- Server Info -->
       <div id="server-info" class="hidden card p-6">
-        <h2 class="text-2xl font-bold mb-2 text-pink-500" id="guild-name"></h2>
-        <p class="text-gray-600 mb-2" id="guild-id"></p>
-        <p class="text-gray-600" id="presence-count"></p>
+        <h2 class="text-2xl font-bold mb-2" id="guild-name"></h2>
+        <p class="text-gray-400 mb-2" id="guild-id"></p>
+        <p class="text-gray-400" id="presence-count"></p>
       </div>
 
       <!-- Channels -->
       <div id="channels-section" class="hidden card p-6">
-        <h3 class="text-xl font-semibold mb-4 text-pink-400">💬 Channels</h3>
-        <ul id="channels-list" class="space-y-2 text-gray-700"></ul>
+        <h3 class="text-xl font-semibold mb-4">💬 Channels</h3>
+        <ul id="channels-list" class="space-y-2"></ul>
       </div>
 
       <!-- Members -->
       <div id="members-section" class="hidden card p-6">
-        <h3 class="text-xl font-semibold mb-4 text-pink-400">👥 Online Members</h3>
+        <h3 class="text-xl font-semibold mb-4">👥 Online Members</h3>
         <div id="members-list" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4"></div>
       </div>
 
@@ -96,7 +123,6 @@
           data.channels.forEach(ch => {
             const li = document.createElement("li");
             li.textContent = ch.name + (ch.type === 2 ? " 🎤" : "");
-            li.className = "px-4 py-2 bg-pink-50 rounded-md";
             chList.appendChild(li);
           });
           document.getElementById("channels-section").classList.remove("hidden");
@@ -110,7 +136,7 @@
             div.className = "flex flex-col items-center";
             div.innerHTML = `
               <img src="${m.avatar_url}" alt="${m.username}" class="avatar w-16 h-16 mb-1">
-              <span class="text-sm text-gray-700 text-center">${m.username}</span>
+              <span class="text-sm text-gray-300 text-center">${m.username}</span>
             `;
             memList.appendChild(div);
           });
